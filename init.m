@@ -5,7 +5,7 @@ joints = []; % this will contain some joints for a given manipulators
 
 %see http://www.elysium-labs.com/robotics-corner/learn-robotics/introduction-to-robotics/joint-state-parameterization-and-forward-kinematics/
 %joint 1
-joint = struct('DH', struct('alpha', 0.1, 'theta', 0.1, 'a', 0.1, 'offset', 0.1),
+joint = struct('DH', struct('alpha', 0.1, 'theta', 0.1, 'a', 0.1, 'offset', 0.1), ...
 	'angle', 0.0
 	);
 %can access joint structure with
@@ -17,7 +17,7 @@ joints = [joints; joint]
 
 %and make a new joint by writing over 'joint'
 %joint 2
-joint = struct('DH', struct('alpha', 0.2, 'theta', 0.2, 'a', 0.2, 'offset', 0.2),
+joint = struct('DH', struct('alpha', 0.2, 'theta', 0.2, 'a', 0.2, 'offset', 0.2), ...
 	'angle', 0.0
 	);
 joints = [joints; joint]
