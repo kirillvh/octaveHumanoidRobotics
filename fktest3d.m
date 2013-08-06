@@ -30,9 +30,9 @@ disp('1 |    0   ')
 disp('2 |    0   ')
 disp('3 |    0   ')
 
-M.joints(1).DH.theta = 0;
-M.joints(2).DH.theta = 0;
-M.joints(3).DH.theta = 0;
+M.joints(1).angle  = 0;
+M.joints(2).angle  = 0;
+M.joints(3).angle  = 0;
 
 Result = forwardKine(M.joints)
 
@@ -45,9 +45,9 @@ disp('2 |    0   ')
 disp('3 |    0   ')
 
 
-M.joints(1).DH.theta = pi/4;
-M.joints(2).DH.theta = 0;
-M.joints(3).DH.theta = 0;
+M.joints(1).angle  = pi/4;
+M.joints(2).angle  = 0;
+M.joints(3).angle  = 0;
 
 Result =forwardKine(M.joints)
 
@@ -59,9 +59,9 @@ disp('1 |    0   ')
 disp('2 |   pi/2 ')
 disp('3 |    0   ') 
 
-M.joints(1).DH.theta = 0;
-M.joints(2).DH.theta = pi/2;
-M.joints(3).DH.theta = 0;
+M.joints(1).angle  = 0;
+M.joints(2).angle  = pi/2;
+M.joints(3).angle  = 0;
 
 Result = forwardKine(M.joints)
 
@@ -73,9 +73,9 @@ disp('1 |    0   ')
 disp('2 |    0   ')
 disp('3 |   pi/2 ')
 
-M.joints(1).DH.theta = 0;
-M.joints(2).DH.theta = 0;
-M.joints(3).DH.theta = pi/2;
+M.joints(1).angle  = 0;
+M.joints(2).angle  = 0;
+M.joints(3).angle  = pi/2;
 
 Result = forwardKine(M.joints)
 
@@ -87,8 +87,8 @@ disp('1 |   pi/2 ')
 disp('2 |   pi/2 ')
 disp('3 |   pi/2 ')
 
-M.joints(1).DH.theta = pi/2;
-M.joints(2).DH.theta = pi/2;
-M.joints(3).DH.theta = pi/2;
+M.joints(1).angle  = pi/2;
+M.joints(2).angle  = pi/2;
+M.joints(3).angle  = pi/2;
 
 Result = forwardKine(M.joints)
