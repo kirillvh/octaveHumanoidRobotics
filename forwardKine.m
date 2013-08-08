@@ -12,6 +12,8 @@ switch length(varargin)
         final = varargin{2};
     otherwise
         disp('Too Many Arguments, using default case')
+        initial = 1;
+        final = size(joints,1);
 end
 T= eye(4,4);
 	for i=initial:final
