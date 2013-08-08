@@ -9,7 +9,7 @@ function obj = addJoint( M, alpha, theta, a, offset, varargin)
             error('Optional inputs must be in format ''variable name'',variable value')
         end
         for ii = 1:2:argl
-            if strcmp(varargin{ii},'Mass')
+            if strcmp(varargin{ii},'mass')
                 joint.mass = varargin{ii+1};
             end
         end
