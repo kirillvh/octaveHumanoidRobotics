@@ -42,7 +42,7 @@ for t=0:time_step:end_time
 	%next calculate the manipulators position and velocity in cartesian coordinates
 	
 	%selecting the position component of the 4x4 matrix with (1:3,4)
-    fk = forwardKine(M.joints);
+	fk = forwardKine(M.joints);
 	manip_position = fk(1:3,4);
 	tool_tip_velocity_measured = (manip_position - manip_position_old)/time_step;
 	manip_position_old = manip_position;
@@ -60,7 +60,7 @@ for t=0:time_step:end_time
 	tool_tip_vel_calculated_log = [tool_tip_vel_calculated_log; tool_tip_velocity_calculated'];
 end
 
-plot(tool_tip_vel_measured_log(2:end,2));
+plot(tool_tip_vel_measured_log(2:end,2));% starting from 2 to skip the inital noise
 hold all;
 plot(tool_tip_vel_calculated_log(2:end,2));
 legend('y axis measured velocity','y axis calculated velocity(via Jacobian)')
