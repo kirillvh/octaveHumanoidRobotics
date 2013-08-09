@@ -7,13 +7,16 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
     kTheta = 1;
     kX = 0.1;
     mode = 0;
+    dump = 0.1;
     
     %local variables
     DOF = size(joints,1);
     argl = length(varargin);
     error = zeros(6,1);
-    joints_ref = zeros(DOF,1);
+    joints_ref = ones(DOF,1);
+    dtheta = zeros(DOF,1);
     
+    error_log = [];
     % Feed optional configurations
     if(argl > 1)
         if rem(argl,2) ~= 0
@@ -35,12 +38,18 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
             if strcmp(varargin{ii},'maxroterr')
                 maxroterr = varargin{ii+1};
             end
+            if strcmp(varargin{ii},'dump')
+                dump = varargin{ii+1};
+            end
             if strcmp(varargin{ii},'mode')
                 if(strcmp(varargin{ii+1},'pinv'))
                     mode = 0;
                 end
                 if(strcmp(varargin{ii+1},'transp'))
                     mode = 1;
+                end
+                if(strcmp(varargin{ii+1},'dsl'))
+                    mode = 2;
                 end
             end
         end
@@ -60,6 +69,9 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
             case 1
                 %use Tanspose (need to implement optimal alpha)
                 ijac = jac';
+            case 2
+                %use Tanspose (need to implement optimal alpha)
+                ijac = jac';
             otherwise
                 ijac = pinv(jac);
         end
@@ -69,13 +81,21 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
         x = fk(1:3,4);
         % Calc the error
         error(1:3) = (pos_ref - x);
+        %error_log = [error_log; error(1:3)'];
         if(max(abs(error(1:3))) < maxposerr && max(abs(error(4:6))) < maxroterr)
             break;
         end
         error(1:3) = kX*error(1:3);
         % Calc new joint angles
-        joints_ref  = joints_ref +ijac*error;
+        if mode == 2
+            dtheta = (ijac*inv(jac*ijac+(dump^2)*eye(6)))*error;
+            joints_ref  = joints_ref + dtheta;
+        else
+            joints_ref  = joints_ref +ijac*error;
+        end
+        
         % Lets just remove the accumulated angle in excess
         joints_ref = mod(joints_ref, 2*pi);
     end
+    %plot(error_log);
 end
