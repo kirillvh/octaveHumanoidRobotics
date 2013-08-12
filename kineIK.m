@@ -1,11 +1,13 @@
 function joints_ref = kineIK(joints, pos_ref, varargin) 
 %http://sourceforge.net/p/robotjoint/code/ci/master/tree/src/RobotManipulator.cxx#l899
+%http://groups.csail.mit.edu/drl/journal_club/papers/033005/buss-2004.pdf
+% to think about: http://mi.ams.eng.osaka-u.ac.jp/pub/2011/tro2011sugihara.pdf
     %default values
     maxiter = 1000;
     maxposerr = 0.005;
     maxroterr = 0.0001;
     kTheta = 1;
-    kX = 0.1;
+    kX = 0.05;
     mode = 0;
     dump = 0.1;
     

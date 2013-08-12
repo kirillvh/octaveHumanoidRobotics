@@ -9,7 +9,9 @@ switch length(varargin)
         final = size(joints,1);
     case 2 
         initial = varargin{1};
-        final = varargin{2};
+        if(varargin{2} > size(joints,1)) disp('forwardKine() error: final joint is beyond manipulators DOF')
+        else final = varargin{2};
+        end
     otherwise
         disp('Too Many Arguments, using default case')
         initial = 1;

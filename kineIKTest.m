@@ -8,6 +8,7 @@ M = Manipulator();
 time_step = 0.01;
 end_time = 10;
 
+
 M = addJoint( M,  0 , 0, 0.2 , 0);
 M = addJoint( M,  0 , 0, 0.2 , 0);
 M = addJoint( M,  0 , 0, 0.2 , 0);
@@ -35,7 +36,7 @@ for y = 0:0.01:DOF*0.2
     %there will also be a comIK() later on, so thats why I choose this name
     % Testing pseudo inverse Jacobian and transpose Jacobian
     
-    jointAnglesRef = kineIK(M.joints, position_ref, 'maxiter', 1000, 'kX', 0.5, 'maxposerr', 0.001, 'mode', 'transp');
+    jointAnglesRef = kineIK(M.joints, position_ref, 'maxiter', 1, 'kX', 0.5, 'maxposerr', 0.001, 'mode', 'transp');
     
     for i=1:DOF
         M.joints(i).angle = jointAnglesRef(i);
@@ -68,7 +69,7 @@ for y = 0:0.01:DOF*0.2
     %there will also be a comIK() later on, so thats why I choose this name
     % Testing pseudo inverse Jacobian and transpose Jacobian
     
-    jointAnglesRef = kineIK(M.joints, position_ref, 'maxiter', 1000, 'kX', 0.5, 'maxposerr', 0.001, 'mode', 'pinv');
+    jointAnglesRef = kineIK(M.joints, position_ref, 'maxiter', 20, 'kX', 0.5, 'maxposerr', 0.001, 'mode', 'pinv');
     
     for i=1:DOF
         M.joints(i).angle = jointAnglesRef(i);
@@ -102,7 +103,7 @@ for y = 0:0.01:DOF*0.2
     %there will also be a comIK() later on, so thats why I choose this name
     % Testing pseudo inverse Jacobian and transpose Jacobian
     
-    jointAnglesRef = kineIK(M.joints, position_ref, 'maxiter', 1000, 'kX', 1, 'maxposerr', 0.001, 'mode', 'dsl');
+    jointAnglesRef = kineIK(M.joints, position_ref, 'maxiter', 20, 'kX', 1, 'maxposerr', 0.001, 'mode', 'dsl');
     
     for i=1:DOF
         M.joints(i).angle = jointAnglesRef(i);
