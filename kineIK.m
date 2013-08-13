@@ -50,7 +50,7 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
                 if(strcmp(varargin{ii+1},'transp'))
                     mode = 1;
                 end
-                if(strcmp(varargin{ii+1},'dsl'))
+                if(strcmp(varargin{ii+1},'dls'))
                     mode = 2;
                 end
             end

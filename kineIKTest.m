@@ -88,7 +88,7 @@ axis([0 20*DOF -1 1]);
 title('TEST CASE 2 - JACOBIAN PSEUDO INVERSE')
 
 disp('--------------------------------------------------------------------')
-disp('-------------------------TEST CASE 3 - DSL--------------------------')
+disp('-------------------------TEST CASE 3 - DLS--------------------------')
 disp('--------------------------------------------------------------------')
 
 positionRef = [];
@@ -103,7 +103,7 @@ for y = 0:0.01:DOF*0.2
     %there will also be a comIK() later on, so thats why I choose this name
     % Testing pseudo inverse Jacobian and transpose Jacobian
     
-    jointAnglesRef = kineIK(M.joints, position_ref, 'maxiter', 20, 'kX', 1, 'maxposerr', 0.001, 'mode', 'dsl');
+    jointAnglesRef = kineIK(M.joints, position_ref, 'maxiter', 20, 'kX', 1, 'maxposerr', 0.001, 'mode', 'dls');
     
     for i=1:DOF
         M.joints(i).angle = jointAnglesRef(i);
@@ -119,7 +119,7 @@ end
 figure
 plot(positionErr_log);
 axis([0 20*DOF -1 1]);
-title('TEST CASE 3 - DSL')
+title('TEST CASE 3 - DLS')
 %disp('position_ref and position_response should be almost the same')
 %disp('watch out for singularities, the IK algo wont be able to solve if a unreachable pos_ref is given')
 	

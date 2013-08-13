@@ -12,6 +12,9 @@ function obj = addJoint( M, alpha, theta, a, offset, varargin)
             if strcmp(varargin{ii},'mass')
                 joint.mass = varargin{ii+1};
             end
+            if strcmp(varargin{ii},'COM')
+                joint.COM = varargin{ii+1};
+            end
         end
     end
     M.joints = [M.joints; joint];
