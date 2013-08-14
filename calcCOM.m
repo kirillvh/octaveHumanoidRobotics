@@ -30,8 +30,12 @@ T = eye(4,4);
         %Changed the FK to be from Base to current link and not from
         %current link to tooltip, still I believe we should implement
         %a real COM position and not as it is at the joint
+        
+        %Kirill: Indeed, Ok done. 
+        %We need to be careful about definition here
+        % I am assuming that the joints COM vector points from the tip(not base) of the joint to its COM position
         T = forwardKine(joints, 1, i);
-        pos = pos + T(1:3,4)*joints(i).mass;
+        pos = pos + (T(1:3,4) + joints.COM)*joints(i).mass;
         mass = mass + joints(i).mass;
 	end
 %We should divide the COM position by the total Mass...	
