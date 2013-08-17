@@ -34,8 +34,22 @@ T = eye(4,4);
         %Kirill: Indeed, Ok done. 
         %We need to be careful about definition here
         % I am assuming that the joints COM vector points from the tip(not base) of the joint to its COM position
-        T = forwardKine(joints, 1, i);
-        pos = pos + (T(1:3,4) + joints.COM)*joints(i).mass;
+        
+        %I think I do not agree, the COM postion need to me transformed to
+        %the base Frame anyway so it is not just a sum.
+        %I created a comTransform function that will create Tranformation
+        %matrix using the COM position and not d and offset.
+        %So here we get the Transformation matrix to i-1 and use the
+        %comTransform as the last joint.
+        
+        Ti = eye(4)*comTransform(joints(i));
+        if(i>1)
+            T = forwardKine(joints, 1, i-1);       
+        else
+            T = eye(4,4);
+        end
+        T = T*Ti;
+        pos = pos + (T(1:3,4))*joints(i).mass;
         mass = mass + joints(i).mass;
 	end
 %We should divide the COM position by the total Mass...	
