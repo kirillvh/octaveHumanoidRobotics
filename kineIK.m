@@ -17,6 +17,7 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
     error = zeros(6,1);
     joints_ref = ones(DOF,1);
     dtheta = zeros(DOF,1);
+    useOrientation = false;
     
     error_log = [];
     % Feed optional configurations
@@ -43,6 +44,10 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
             if strcmp(varargin{ii},'dump')
                 dump = varargin{ii+1};
             end
+            if strcmp(varargin{ii},'orientation')
+                OrientationRef = varargin{ii+1};
+                useOrientation = true;
+            end
             if strcmp(varargin{ii},'mode')
                 if(strcmp(varargin{ii+1},'pinv'))
                     mode = 0;
@@ -56,6 +61,13 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
             end
         end
     end
+    
+    %Load initial joints reference as their current angle (useful for small
+    %movements...)
+    %for i=1:DOF
+    %    joints_ref(i,1) = joints(i).angle;
+    %end
+    
     for cntr = 1:maxiter
         % Feed Joints Angles
         for i=1:DOF
@@ -83,11 +95,20 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
         x = fk(1:3,4);
         % Calc the error
         error(1:3) = (pos_ref - x);
+        if useOrientation == true
+            rot = ROT(fk);
+            Q = calcQuaternion(rot);
+            OrientationCurr = Q(2:4);
+            % How can i implement the OrientationError =
+            % OrientationRef*OrientationCurr???
+            error(4:6) = rot*OrientationError;
+        end      
         %error_log = [error_log; error(1:3)'];
         if(max(abs(error(1:3))) < maxposerr && max(abs(error(4:6))) < maxroterr)
             break;
         end
         error(1:3) = kX*error(1:3);
+        error(4:6) = kTheta*error(4:6);
         % Calc new joint angles
         if mode == 2
             dtheta = (ijac*inv(jac*ijac+(dump^2)*eye(6)))*error;
