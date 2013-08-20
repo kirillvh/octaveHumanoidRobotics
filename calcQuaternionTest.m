@@ -84,8 +84,8 @@ M.joints(2).angle  = 0;
 M.joints(3).angle  = pi/2;
 
 Result = forwardKine(M.joints)
-R = ROT(Result);
-Q = calcQuaternion(R)
+R2 = ROT(Result)
+Q2 = calcQuaternion(R)
 
 disp('---------- ')
 disp('--Test 4-- ')
@@ -100,5 +100,12 @@ M.joints(2).angle  = pi/2;
 M.joints(3).angle  = pi/2;
 
 Result = forwardKine(M.joints)
-R = ROT(Result);
+R = ROT(Result)
 Q = calcQuaternion(R)
+
+MQ = multQuaternions(Q,Q2)
+
+MR = R*R2
+
+MRQ = calcQuaternion(MR)
+

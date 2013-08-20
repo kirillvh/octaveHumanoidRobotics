@@ -18,7 +18,7 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
     joints_ref = ones(DOF,1);
     dtheta = zeros(DOF,1);
     useOrientation = false;
-    
+    OErr = zeros(1,3);
     error_log = [];
     % Feed optional configurations
     if(argl > 1)
@@ -45,7 +45,7 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
                 dump = varargin{ii+1};
             end
             if strcmp(varargin{ii},'orientation')
-                OrientationRef = varargin{ii+1};
+                ORef = varargin{ii+1};
                 useOrientation = true;
             end
             if strcmp(varargin{ii},'mode')
@@ -97,18 +97,17 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
         error(1:3) = (pos_ref - x);
         if useOrientation == true
             rot = ROT(fk);
-            Q = calcQuaternion(rot);
-            OrientationCurr = Q(2:4);
-            % How can i implement the OrientationError =
-            % OrientationRef*OrientationCurr???
-            error(4:6) = rot*OrientationError;
+            OCurr = calcQuaternion(rot);
+            OCurr(2:4) = -OCurr(2:4);
+            OComp = multQuaternions(ORef,OCurr);
+            OErr = rot*OComp(2:4)';
         end      
         %error_log = [error_log; error(1:3)'];
-        if(max(abs(error(1:3))) < maxposerr && max(abs(error(4:6))) < maxroterr)
+        if(max(abs(error(1:3))) < maxposerr && max(abs(OErr)) < maxroterr)
             break;
         end
         error(1:3) = kX*error(1:3);
-        error(4:6) = kTheta*error(4:6);
+        error(4:6) = kTheta*OErr;
         % Calc new joint angles
         if mode == 2
             dtheta = (ijac*inv(jac*ijac+(dump^2)*eye(6)))*error;

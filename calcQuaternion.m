@@ -30,6 +30,6 @@ tr = trace(R);
         qz = 0.25 * S;
     end
 
-    Q = [qw;qx;qy;qz];
+    Q = [qw qx qy qz];
 end
 
