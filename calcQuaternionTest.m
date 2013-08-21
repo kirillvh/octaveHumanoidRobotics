@@ -103,9 +103,3 @@ Result = forwardKine(M.joints)
 R = ROT(Result)
 Q = calcQuaternion(R)
 
-MQ = multQuaternions(Q,Q2)
-
-MR = R*R2
-
-MRQ = calcQuaternion(MR)
-

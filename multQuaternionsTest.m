@@ -82,11 +82,12 @@ disp('----------------------------- ')
 disp(' ')
 
 MQ = multQuaternions(Q2,Q1)
-MR = R2*R1;
 
 disp('----------------------------- ')
 disp('-- calcQuaternion(R2*R1)  --- ')
 disp('----------------------------- ')
 disp(' ')
+
+MR = R2*R1;
 MRQ = calcQuaternion(MR)
 

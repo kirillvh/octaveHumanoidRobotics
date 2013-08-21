@@ -100,14 +100,14 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
             OCurr = calcQuaternion(rot);
             OCurr(2:4) = -OCurr(2:4);
             OComp = multQuaternions(ORef,OCurr);
-            OErr = rot*OComp(2:4)';
+            error(4:6) = rot*OComp(2:4)';
         end      
-        %error_log = [error_log; error(1:3)'];
-        if(max(abs(error(1:3))) < maxposerr && max(abs(OErr)) < maxroterr)
+        %error_log = [error_log; error];
+        if(max(abs(error(1:3))) < maxposerr && max(abs(error(4:6))) < maxroterr)
             break;
         end
         error(1:3) = kX*error(1:3);
-        error(4:6) = kTheta*OErr;
+        error(4:6) = kTheta*error(4:6);
         % Calc new joint angles
         if mode == 2
             dtheta = (ijac*inv(jac*ijac+(dump^2)*eye(6)))*error;
