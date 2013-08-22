@@ -20,6 +20,7 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
     useOrientation = false;
     OErr = zeros(1,3);
     error_log = [];
+    useJointsAngles = false;
     % Feed optional configurations
     if(argl > 1)
         if rem(argl,2) ~= 0
@@ -44,6 +45,9 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
             if strcmp(varargin{ii},'dump')
                 dump = varargin{ii+1};
             end
+            if strcmp(varargin{ii},'useJointsAngles')
+                useJointsAngles = varargin{ii+1};
+            end
             if strcmp(varargin{ii},'orientation')
                 ORef = varargin{ii+1};
                 useOrientation = true;
@@ -64,9 +68,11 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
     
     %Load initial joints reference as their current angle (useful for small
     %movements...)
-    %for i=1:DOF
-    %    joints_ref(i,1) = joints(i).angle;
-    %end
+    if useJointsAngles == true
+        for i=1:DOF
+            joints_ref(i,1) = joints(i).angle;
+        end
+    end
     
     for cntr = 1:maxiter
         % Feed Joints Angles
@@ -119,5 +125,6 @@ function joints_ref = kineIK(joints, pos_ref, varargin)
         % Lets just remove the accumulated angle in excess
         joints_ref = mod(joints_ref, 2*pi);
     end
+    cntr
     %plot(error_log);
 end
