@@ -52,4 +52,4 @@ for y = 0:0.01:DOF*0.2
     end
 end
 
-Animate2D(M.joints, path, 1);
+Animate2D(M.joints, path);
