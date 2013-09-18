@@ -1,6 +1,7 @@
 function COM = calcRobotCOM(R)
 %CALCROBOTCOM Summary of this function goes here
 %   Detailed explanation goes here
+    COM = zeros(4,1);
     nM = size(R.manipulators, 1);
     for i=1:nM
         iCOM = calcCOM(R.manipulators(i).joints);
