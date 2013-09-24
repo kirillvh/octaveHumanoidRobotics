@@ -13,6 +13,11 @@ function joints_ref = IK(joints, pos_ref, varargin)
     ikMode=0; % 0 = KinematicMode, 1 = COMMode
     KinematicMode=0;
     COMMode=1;
+    WorldFrameMode = 0;
+    TooltipFrameMode = 1;
+    frameMode = WorldFrameMode;
+    
+    useRobot = false;
     
     %local variables
     DOF = size(joints,1);
@@ -74,6 +79,18 @@ function joints_ref = IK(joints, pos_ref, varargin)
                     ikMode = COMMode;
                 end
             end
+            if strcmp(varargin{ii},'frameMode')
+                if(strcmp(varargin{ii+1},'world'))
+                    frameMode = WorldFrameMode;
+                end
+                if(strcmp(varargin{ii+1},'tooltip'))
+                    frameMode = TooltipFrameMode;
+                end
+            end
+            if strcmp(varargin{ii},'Robot')
+                R = varargin{ii+1};
+                useRobot = true;
+            end
         end
     end
     
@@ -90,11 +107,34 @@ function joints_ref = IK(joints, pos_ref, varargin)
         for i=1:DOF
             joints(i).angle = joints_ref(i,1);
         end
+        % Get TransForm Matrix
+        fk = forwardKine(joints);
+        % Get Translation
+        if ikMode == KinematicMode
+            x = fk(1:3,4);
+        elseif ikMode == COMMode
+            if(useRobot == false)
+                xCom= calcCOM(joints);
+            else
+                xCom = calcRobotCOM(R);
+            end
+            x = xCom(1:3);
+        end
         % Calc Jacobian
         if ikMode == KinematicMode
             jac = kineJacobian(joints);
         elseif ikMode == COMMode
-            jac = comJacobian(joints);
+            if(useRobot == false)
+                jac = comJacobian(joints);
+            else
+                jac = comJacobian(joints, 'Robot', R);
+            end
+            if(frameMode == TooltipFrameMode)
+                jac = comJacChangeFrame(jac, joints,xCom);
+                rot = ROT(fk);
+                trans = TRANS(fk);
+                x = rot'*(x-trans);
+            end
         end
         % Calc PseudoInverse
         switch mode
@@ -110,15 +150,6 @@ function joints_ref = IK(joints, pos_ref, varargin)
             otherwise
                 ijac = pinv(jac);
         end
-        % Get TransForm Matrix
-        fk = forwardKine(joints);
-        % Get Translation
-	if ikMode == KinematicMode
-		x = fk(1:3,4);
-	elseif ikMode == COMMode
-		xCom= calcCOM(joints);
-		x = xCom(1:3);
-	end
         % Calc the error
         error(1:3) = (pos_ref - x);
         if useOrientation == true

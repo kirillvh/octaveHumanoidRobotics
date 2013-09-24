@@ -1,3 +1,4 @@
+
 clear all;
 close all;
 
@@ -30,8 +31,6 @@ COMPos_old = zeros(3,1);
 COM_vel_measured_log = [];
 COM_vel_calculated_log = [];
 
-
-
 for t=0:time_step:end_time
 	%generate a joint angle, the 0.01 is a arbitary number, feel free to change
 	R.manipulators(1).joints(1).angle = sin(joint_rotrate(1)*t);
@@ -55,14 +54,20 @@ for t=0:time_step:end_time
 	%next calculate the manipulators position and velocity in cartesian coordinates
 	
 	%selecting the position component of the 4x4 matrix with (1:3,4)
-	COM = calcRobotCOM(R);
-	COMPos = COM(1:3);
+	wCOM = calcRobotCOM(R);
+    wCOMPos = wCOM(1:3);
+    fk = forwardKine(R.manipulators(1).joints);
+	Rot = ROT(fk);
+    T = TRANS(fk);
+    COM = Rot'*(wCOMPos-T);
+    COMPos = COM(1:3);
 	COM_velocity_measured = (COMPos - COMPos_old)/time_step;
 	COMPos_old = COMPos;
 	
 	%now to do the actual testing of the com jacobian
 	%first get the jacobian
-	com_jac = comJacobian(R.manipulators(1).joints, 'Robot', R);
+	wcom_jac = comJacobian(R.manipulators(1).joints, 'Robot', R);
+    com_jac = comJacChangeFrame(wcom_jac, R.manipulators(1).joints, wCOM);
 	%now since the kinematic Jacobian has the following relation
 	% com_velocity = comJacobian * joint_velocity
 	% it means that comJacobian * joint_velocity and tool_tip_velocity_measured should be almost equal except for a small error due to having a large timestep
