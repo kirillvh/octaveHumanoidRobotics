@@ -82,6 +82,8 @@ function [joints_ref_Left, joints_ref_Right] = IKHumanoid(R, L2CRef, L2RRef, var
         for i=1:DOF
             jointsLeft(i).angle = joints_ref_Left(i,1);
             jointsRight(i).angle = joints_ref_Right(i,1);
+            R.manipulators(1).joints = jointsLeft;
+            R.manipulators(2).joints = jointsRight;
         end
         % Get TransForm Matrix
         fk = forwardKine(jointsLeft);
