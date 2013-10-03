@@ -46,10 +46,10 @@ R.manipulators(2).joints(3).angle = 2.13;
 
 M1jointAnglesRef = [5.3;5.13;2.13];
 
-for y = -0.3:0.01:0.1
+for y = -0.1:0.01:0.1
     
-    position_ref = [y; 0.5; 0];
-    position_ref_L2R = [y*0.3; -y*0.4; 0];
+    position_ref = [-0.1; 0.5; 0];
+    position_ref_L2R = [2*y; -10*y*y+0.1; 0];
     %position_ref = [0; 0.2; 0];
     %there will also be a comIK() later on, so thats why I choose this name
     % Testing pseudo inverse Jacobian and transpose Jacobian

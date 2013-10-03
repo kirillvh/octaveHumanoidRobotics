@@ -129,7 +129,7 @@ function [baseLeg_jointRefs, swingLeg_jointRefs] = bipedCOMIK(R, baseIndex, swin
         swingLeg_OComp = multQuaternions(SwingQuart,swingLeg_OCurr);
         
         swingLeg_Error(1:3) = SwingVec - swingLeg_trans;
-        %swingLeg_Error(4:6) = swingLeg_rot*swingLeg_OComp(2:4)';
+        swingLeg_Error(4:6) = swingLeg_rot*swingLeg_OComp(2:4)';
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         % CHECK IF ERROR IS WITHIN TOLERANCE
