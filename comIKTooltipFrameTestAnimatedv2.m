@@ -79,4 +79,4 @@ for y = -0.3:0.01:0.1
 end
 path = [pathM0, pathM1];
 
-AnimateRobot2D(R, path, 'plotCOM', true);
+AnimateRobot2D(R, path, 'plotCOM', true, 'baseFrame', 1);

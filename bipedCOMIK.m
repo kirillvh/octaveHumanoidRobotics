@@ -1,4 +1,4 @@
-function [baseLeg_jointRefs, swingLeg_jointRefs] = bipedCOMIK(R, baseIndex, swingIndex, base2COMVec, base2SwingVec, varargin) 
+function [baseLeg_jointRefs, swingLeg_jointRefs] = bipedCOMIK(R, baseIndex, swingIndex, base2COMVec, base2SwingVec, base2SwingQuart, varargin) 
 %BIPEDCOMIK Summary of this function goes here
 %   Detailed explanation goes here
     maxiter = 1000;
